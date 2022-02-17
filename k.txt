@@ -1,0 +1,53 @@
+If(Toggle3_1.Value && Toggle3.Value && Toggle3_2.Value && Toggle1.Value && Toggle5.Value && Toggle4.Value;
+    If(Connection.Connected;
+        Patch(
+            SIEMBRA;
+            Defaults(SIEMBRA);
+            {
+                fecha: DPfecha.SelectedDate;
+                operario: Cboperario.Selected.cr605_t159_interno;
+                bloque_y_cama: CbBloque.Selected.Result & Cbcama.Selected.Result;
+                //bloque_y_cama: LookUp(t49_mcamass;(CbBloque.Selected.Result & Cbcama.Selected.Result)=bloqu);
+                variedad: LookUp(
+                    ColVariedades;
+                    Cbvariedad.Selected.cr605_variedad = cr605_variedad
+                ).cr605_codigo;
+                //Toco buscar el nombre directo en la tabla y traer el codigo
+                cantidad: Value(Tpcantidad.Text);
+                nom_variedad: Cbvariedad.Selected.t09_codigo
+            }
+        );
+        Collect(
+            ColInserSiembra;
+            {
+                fecha: DPfecha.SelectedDate;
+                operario: Cboperario.Selected.cr605_t159_interno;
+                bloque_y_cama: CbBloque.Selected.Result & Cbcama.Selected.Result;
+                //bloque_y_cama: LookUp(t49_mcamass;(CbBloque.Selected.Result & Cbcama.Selected.Result)=bloqu);
+                variedad: LookUp(
+                    ColVariedades;
+                    Cbvariedad.Selected.cr605_variedad = cr605_variedad
+                ).cr605_codigo;
+                //Toco buscar el nombre directo             en la tabla y traer el codigo
+                cantidad: Value(Tpcantidad.Text);
+                nom_variedad:Cbvariedad.Selected.t09_codigo
+
+            }
+        );;
+        SaveData(
+            ColInserSiembra;
+            "ColParaSiembra"
+        )
+    );;
+    Concurrent(
+        Reset(CbBloque);
+        Reset(Cbcama);
+        Reset(Cbvariedad);
+        Reset(Tpcantidad);
+        Reset(Cboperario)
+    );
+    Notify(
+        "Verifica los campos";
+        NotificationType.Error
+    )
+)
